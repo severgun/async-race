@@ -1,2 +1,1 @@
-# async-race
-RS School Async Race Task
+# 🏎️ RS School Async Race Task
