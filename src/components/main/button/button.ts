@@ -25,5 +25,6 @@ export class Button {
   private configureElement(params: ButtonParams): void {
     this.element.classList.add(CssClasses.BUTTON, ...params.cssClasses);
     this.element.innerText = params.text;
+    this.element.title = params.tooltip;
   }
 }
