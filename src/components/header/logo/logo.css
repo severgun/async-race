@@ -1,0 +1,11 @@
+.logo {
+  display: flex;
+}
+
+.logo__img {
+  width: 6rem;
+}
+
+.logo__title {
+  padding-left: 1rem;
+}
