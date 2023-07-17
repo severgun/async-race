@@ -1,6 +1,6 @@
 import "./race-lane.css";
 import finishFlagImg from "../../../assets/logo.svg";
-import { Button, ButtonType } from "../button/button";
+import { Button, ButtonParams } from "../button/button";
 
 enum CssClasses {
   "RACE_LANE" = "race-lane",
@@ -16,25 +16,25 @@ enum CssClasses {
   "STOP_ENGINE_BUTTON" = "stop-eng-btn",
 }
 
-const selectButtonParams: ButtonType = {
+const selectButtonParams: ButtonParams = {
   cssClasses: [CssClasses.SELECT_BUTTON],
   text: "SELECT",
   tooltip: "Select car",
 };
 
-const removeButtonParams: ButtonType = {
+const removeButtonParams: ButtonParams = {
   cssClasses: [CssClasses.REMOVE_BUTTON],
   text: "REMOVE",
   tooltip: "Remove car",
 };
 
-const runEngineButtonParams: ButtonType = {
+const runEngineButtonParams: ButtonParams = {
   cssClasses: [CssClasses.RUN_ENGINE_BUTTON],
   text: "R",
   tooltip: "Run engine",
 };
 
-const stopEngineButtonParams: ButtonType = {
+const stopEngineButtonParams: ButtonParams = {
   cssClasses: [CssClasses.STOP_ENGINE_BUTTON],
   text: "S",
   tooltip: "Stop engine",
