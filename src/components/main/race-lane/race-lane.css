@@ -1,0 +1,35 @@
+.race-lane {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.race-lane__track {
+  margin: 0;
+  width: 100%;
+  border-bottom: 0.3rem dashed red;
+}
+.race-lane__flag {
+  position: relative;
+  left: 80%;
+  width: 4rem;
+}
+.race-lane__first-row, .race-lane__second-row {
+  display: flex;
+  margin: 0.1rem 0;
+}
+.select-car-btn {
+  width: 6em;
+  height: 2.5em;
+  margin-right: 0.2em;
+}
+.remove-car-btn {
+  height: 2.5em;
+  width: 6em;
+}
+.run-eng-btn {
+  min-width: 2.9em;
+  margin-right: 0.2em;
+}
+.stop-eng-btn {
+  min-width: 2.9em;
+}
