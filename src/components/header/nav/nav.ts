@@ -4,7 +4,6 @@ enum CssClasses {
   NAV = "nav",
   NAV_LIST = "nav__list",
   NAV_ITEM = "nav__item",
-  WRAPPER = "wrapper",
 }
 
 const NavButtons = ["Garage", "Winners"];
@@ -16,7 +15,7 @@ export default class Nav {
 
   constructor() {
     this.element = document.createElement("nav");
-    this.element.classList.add(CssClasses.WRAPPER, CssClasses.NAV);
+    this.element.classList.add(CssClasses.NAV);
 
     this.list = document.createElement("ul");
     this.list.classList.add(CssClasses.NAV_LIST);

@@ -16,5 +16,5 @@ body {
   margin: 0 auto;
   padding: 0 1rem;
   background-color: gray;
-  width: 128rem;
+  max-width: 128rem;
 }

@@ -5,7 +5,6 @@ enum CssClasses {
   LOGO = "logo",
   LOGO_TITLE = "logo__title",
   LOGO_IMG = "logo__img",
-  WRAPPER = "wrapper",
 }
 
 const LOGO_TEXT = "RS School Async Race";
@@ -31,7 +30,7 @@ export default class Logo {
   }
 
   private configureElem(): void {
-    this.element.classList.add(CssClasses.WRAPPER, CssClasses.LOGO);
+    this.element.classList.add(CssClasses.LOGO);
 
     this.imgElement.classList.add(CssClasses.LOGO_IMG);
     this.imgElement.setAttribute("src", LogoImg);
