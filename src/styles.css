@@ -8,7 +8,7 @@ a {
   color: inherit;
 }
 
-body {
+body, h2, p {
   margin: 0;
 }
 

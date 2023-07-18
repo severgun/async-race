@@ -1,6 +1,10 @@
 import PaginationControls from "./pagination-controls/pagination-controls";
+import WinnersTable from "./winners-table/winners-table";
 
-const columnHeaders = ["#", "Car", "Name", "Wins", "Best time (s)"];
+enum CssClasses {
+  WINNERS_PAGE = "winners-page",
+  WINNERS_TITLE = "winners-title",
+}
 const titleText = "WINNERS";
 
 export default class WinnersPage {
@@ -14,9 +18,11 @@ export default class WinnersPage {
 
   constructor() {
     this.element = document.createElement("div");
-    this.table = document.createElement("table");
     this.title = document.createElement("h2");
     this.paginationControls = new PaginationControls();
+    this.table = new WinnersTable();
+
+    this.configureElem();
   }
 
   getHtmlElement(): HTMLElement {
@@ -24,24 +30,14 @@ export default class WinnersPage {
   }
 
   private configureElem(): void {
+    this.element.classList.add(CssClasses.WINNERS_PAGE);
+    this.title.classList.add(CssClasses.WINNERS_TITLE);
     this.title.innerText = titleText;
-    this.addTableHeader();
 
     this.element.append(
       this.title,
       this.paginationControls.getHtmlElement(),
-      this.table,
+      this.table.getHtmlElement(),
     );
-  }
-
-  private addTableHeader(): void {
-    const headerRow = document.createElement("tr");
-    columnHeaders.forEach((title) => {
-      const headerTitle = document.createElement("th");
-      headerTitle.innerText = title;
-      headerRow.append(headerTitle);
-    });
-
-    this.table.append(headerRow);
   }
 }

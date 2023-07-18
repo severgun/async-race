@@ -4,10 +4,11 @@ export interface ButtonParams {
   cssClasses: string[];
   text: string;
   tooltip: string;
+  callBack: () => void;
 }
 
 enum CssClasses {
-  "BUTTON" = "button",
+  BUTTON = "button",
 }
 
 export class Button {

@@ -20,24 +20,28 @@ const selectButtonParams: ButtonParams = {
   cssClasses: [CssClasses.SELECT_BUTTON],
   text: "SELECT",
   tooltip: "Select car",
+  callBack: () => {},
 };
 
 const removeButtonParams: ButtonParams = {
   cssClasses: [CssClasses.REMOVE_BUTTON],
   text: "REMOVE",
   tooltip: "Remove car",
+  callBack: () => {},
 };
 
 const runEngineButtonParams: ButtonParams = {
   cssClasses: [CssClasses.RUN_ENGINE_BUTTON],
   text: "R",
   tooltip: "Run engine",
+  callBack: () => {},
 };
 
 const stopEngineButtonParams: ButtonParams = {
   cssClasses: [CssClasses.STOP_ENGINE_BUTTON],
   text: "S",
   tooltip: "Stop engine",
+  callBack: () => {},
 };
 
 export default class RaceLane {
