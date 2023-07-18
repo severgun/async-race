@@ -3,17 +3,17 @@ import finishFlagImg from "../../../assets/logo.svg";
 import { Button, ButtonParams } from "../button/button";
 
 enum CssClasses {
-  "RACE_LANE" = "race-lane",
-  "RACE_LANE_TRACK" = "race-lane__track",
-  "RACE_LANE_CAR_ICON" = "race-lane__car",
-  "RACE_LANE_CAR_NAME" = "race-lane__car-name",
-  "RACE_LANE_FIRST_ROW" = "race-lane__first-row",
-  "RACE_LANE_SECOND_ROW" = "race-lane__second-row",
-  "FINISH_FLAG" = "race-lane__flag",
-  "SELECT_BUTTON" = "select-car-btn",
-  "REMOVE_BUTTON" = "remove-car-btn",
-  "RUN_ENGINE_BUTTON" = "run-eng-btn",
-  "STOP_ENGINE_BUTTON" = "stop-eng-btn",
+  RACE_LANE = "race-lane",
+  RACE_LANE_TRACK = "race-lane__track",
+  RACE_LANE_CAR_ICON = "race-lane__car",
+  RACE_LANE_CAR_NAME = "race-lane__car-name",
+  RACE_LANE_FIRST_ROW = "race-lane__first-row",
+  RACE_LANE_SECOND_ROW = "race-lane__second-row",
+  FINISH_FLAG = "race-lane__flag",
+  SELECT_BUTTON = "select-car-btn",
+  REMOVE_BUTTON = "remove-car-btn",
+  RUN_ENGINE_BUTTON = "run-eng-btn",
+  STOP_ENGINE_BUTTON = "stop-eng-btn",
 }
 
 const selectButtonParams: ButtonParams = {
