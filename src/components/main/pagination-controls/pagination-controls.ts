@@ -1,4 +1,4 @@
-import { Button, ButtonParams } from "../../button/button";
+import { Button, ButtonParams } from "../button/button";
 import "./pagination-controls.css";
 
 enum CssClasses {

@@ -1,4 +1,4 @@
-import PaginationControls from "./pagination-controls/pagination-controls";
+import PaginationControls from "../pagination-controls/pagination-controls";
 import WinnersTable from "./winners-table/winners-table";
 
 enum CssClasses {
