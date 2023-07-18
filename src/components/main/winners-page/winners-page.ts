@@ -3,18 +3,18 @@ import WinnersTable from "./winners-table/winners-table";
 
 enum CssClasses {
   WINNERS_PAGE = "winners-page",
-  WINNERS_TITLE = "winners-title",
+  WINNERS_TITLE = "winners__title",
 }
-const titleText = "WINNERS";
+const TITLE_TEXT = "WINNERS";
 
 export default class WinnersPage {
   private element;
 
-  private table;
-
   private title;
 
   private paginationControls;
+
+  private table;
 
   constructor() {
     this.element = document.createElement("div");
@@ -32,7 +32,7 @@ export default class WinnersPage {
   private configureElem(): void {
     this.element.classList.add(CssClasses.WINNERS_PAGE);
     this.title.classList.add(CssClasses.WINNERS_TITLE);
-    this.title.innerText = titleText;
+    this.title.innerText = TITLE_TEXT;
 
     this.element.append(
       this.title,
