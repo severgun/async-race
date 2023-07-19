@@ -1,3 +1,4 @@
+import Main from "../main/main";
 import "./header.css";
 import Logo from "./logo/logo";
 import Nav from "./nav/nav";
@@ -14,12 +15,12 @@ export default class Header {
 
   private nav: Nav;
 
-  constructor() {
+  constructor(main: Main) {
     this.element = document.createElement("header");
     this.element.classList.add(CssClasses.WRAPPER, CssClasses.HEADER);
 
     this.logo = new Logo();
-    this.nav = new Nav();
+    this.nav = new Nav(main);
 
     this.configureElem();
   }

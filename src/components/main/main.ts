@@ -1,4 +1,6 @@
+import GaragePage from "./garage-page/garage-page";
 import "./main.css";
+import WinnersPage from "./winners-page/winners-page";
 
 enum CssClasses {
   MAIN = "main",
@@ -8,16 +10,34 @@ enum CssClasses {
 export default class Main {
   private element;
 
+  private garagePage;
+
+  private winnersPage;
+
   constructor() {
     this.element = document.createElement("main");
-    this.element.classList.add(CssClasses.WRAPPER, CssClasses.MAIN);
 
-    // this.configureElem();
+    this.garagePage = new GaragePage();
+
+    this.winnersPage = new WinnersPage();
+
+    this.configureElem();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  // private configureElem(): void {}
+  getGaragePage(): GaragePage {
+    return this.garagePage;
+  }
+
+  getWinnersPage(): WinnersPage {
+    return this.winnersPage;
+  }
+
+  private configureElem(): void {
+    this.element.classList.add(CssClasses.WRAPPER, CssClasses.MAIN);
+    this.element.append(this.garagePage.getHtmlElement());
+  }
 }

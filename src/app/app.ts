@@ -14,8 +14,8 @@ export default class App {
 
   constructor() {
     this.favicon = document.createElement("link");
-    this.header = new Header();
     this.main = new Main();
+    this.header = new Header(this.main);
     this.footer = new Footer();
   }
 
