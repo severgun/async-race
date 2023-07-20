@@ -2,6 +2,8 @@ import "./garage-page.css";
 import CarEditControls from "./car-edit-controls/car-edit-controls";
 import PaginationControls from "../pagination-controls/pagination-controls";
 import GarageControls from "./garage-controls/garage-controls";
+import { AsyncRaceApi, Car } from "../../../app/async-race-api";
+import RaceLane from "../race-lane/race-lane";
 
 enum CssClasses {
   GARAGE_PAGE = "garage-page",
@@ -24,6 +26,8 @@ export default class GaragePage {
 
   private raceLanesContainer;
 
+  private loadEventHandlerBound = this.loadEventHandler.bind(this);
+
   constructor() {
     this.element = document.createElement("div");
     this.carEditControls = new CarEditControls();
@@ -37,6 +41,14 @@ export default class GaragePage {
 
   getHtmlElement(): HTMLElement {
     return this.element;
+  }
+
+  updateRaceLanesContainer(cars: Car[]): void {
+    this.raceLanesContainer.replaceChildren();
+    cars.forEach((car) => {
+      const raceLane = new RaceLane(car);
+      this.raceLanesContainer.append(raceLane.getHtmlElement());
+    });
   }
 
   private configureElement(): void {
@@ -54,5 +66,18 @@ export default class GaragePage {
       this.paginationControls.getHtmlElement(),
       this.raceLanesContainer,
     );
+
+    this.getHtmlElement().addEventListener(
+      "DOMNodeInserted",
+      this.loadEventHandlerBound,
+    );
+  }
+
+  private async loadEventHandler(event: Event): Promise<void> {
+    if (event.target === this.getHtmlElement()) {
+      const cars = await AsyncRaceApi.getCars();
+      this.updateRaceLanesContainer(cars);
+      console.log("garage loadEventHandler", event, cars);
+    }
   }
 }
