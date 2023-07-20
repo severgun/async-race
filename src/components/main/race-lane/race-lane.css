@@ -8,11 +8,21 @@
   width: 100%;
   border-bottom: 0.3rem dashed red;
 }
+.race-lane__car, .race-lane__car > svg {
+  display: inline-block;
+  width: 4rem;
+  height: 4rem;
+}
 .race-lane__flag {
+  display: inline-block;
   position: relative;
   left: 80%;
-  width: 4rem;
 }
+.race-lane__flag, .race-lane__flag > svg {
+  width: 7rem;
+  height: 3.5rem;
+}
+
 .race-lane__first-row, .race-lane__second-row {
   display: flex;
   margin: 0.1rem 0;

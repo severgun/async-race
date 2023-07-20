@@ -1,6 +1,8 @@
 import "./race-lane.css";
-import finishFlagImg from "../../../assets/logo.svg";
+import finishFlagIcon from "../../../assets/logo.svg";
+import carIcon from "../../../assets/tractor-side-view-svgrepo-com.svg";
 import { Button, ButtonParams } from "../button/button";
+import { Car } from "../../../app/async-race-api";
 
 enum CssClasses {
   RACE_LANE = "race-lane",
@@ -9,7 +11,7 @@ enum CssClasses {
   RACE_LANE_CAR_NAME = "race-lane__car-name",
   RACE_LANE_FIRST_ROW = "race-lane__first-row",
   RACE_LANE_SECOND_ROW = "race-lane__second-row",
-  FINISH_FLAG = "race-lane__flag",
+  RACE_LANE_FINISH_FLAG = "race-lane__flag",
   SELECT_BUTTON = "select-car-btn",
   REMOVE_BUTTON = "remove-car-btn",
   RUN_ENGINE_BUTTON = "run-eng-btn",
@@ -53,6 +55,8 @@ export default class RaceLane {
 
   private carName;
 
+  private carImg;
+
   private selectButton;
 
   private removeButton;
@@ -63,12 +67,13 @@ export default class RaceLane {
 
   private finishFlag;
 
-  constructor() {
+  constructor(car: Car) {
     this.element = document.createElement("div");
     this.carName = document.createElement("p");
     this.track = document.createElement("div");
-    this.finishFlag = document.createElement("img");
-    this.car = "";
+    this.carImg = document.createElement("div");
+    this.finishFlag = document.createElement("div");
+    this.car = car;
     this.selectButton = new Button(selectButtonParams);
     this.removeButton = new Button(removeButtonParams);
     this.runEngButton = new Button(runEngineButtonParams);
@@ -84,6 +89,7 @@ export default class RaceLane {
   private configureElement(): void {
     this.element.classList.add(CssClasses.RACE_LANE);
     this.carName.classList.add(CssClasses.RACE_LANE_CAR_NAME);
+    this.carName.innerText = this.car.name;
 
     const firstRow = document.createElement("div");
     firstRow.classList.add(CssClasses.RACE_LANE_FIRST_ROW);
@@ -94,9 +100,12 @@ export default class RaceLane {
     );
 
     this.track.classList.add(CssClasses.RACE_LANE_TRACK);
-    this.finishFlag.classList.add(CssClasses.FINISH_FLAG);
-    this.finishFlag.src = finishFlagImg;
-    this.track.append(this.finishFlag);
+    this.carImg.classList.add(CssClasses.RACE_LANE_CAR_ICON);
+    this.carImg.innerHTML = carIcon;
+    this.carImg.style.fill = this.car.color;
+    this.finishFlag.classList.add(CssClasses.RACE_LANE_FINISH_FLAG);
+    this.finishFlag.innerHTML = finishFlagIcon;
+    this.track.append(this.carImg, this.finishFlag);
 
     const secondRow = document.createElement("div");
     secondRow.classList.add(CssClasses.RACE_LANE_SECOND_ROW);
