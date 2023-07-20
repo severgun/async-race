@@ -8,9 +8,10 @@
 }
 .author-link-icon {
   width: 2.2rem;
-  object-fit: contain;
+  height: 2.2rem;
 }
 .author-link-text {
   margin-left: 1rem;
+  line-height: 2.2rem;
   font-size: 1.2rem;
 }

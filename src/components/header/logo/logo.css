@@ -1,9 +1,11 @@
 .logo {
   display: flex;
+  align-items: center;
 }
 
-.logo__img {
+.logo__img, .logo__img > svg {
   width: 6rem;
+  height: 3rem;
 }
 
 .logo__title {

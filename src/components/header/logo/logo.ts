@@ -8,18 +8,17 @@ enum CssClasses {
 }
 
 const LOGO_TEXT = "RS School Async Race";
-const LOGO_ALT_TEXT = "RS School Async Race Logo";
 
 export default class Logo {
   private element;
 
-  private imgElement;
+  private iconElement;
 
   private titleElement;
 
   constructor() {
     this.element = document.createElement("div");
-    this.imgElement = document.createElement("img");
+    this.iconElement = document.createElement("div");
     this.titleElement = document.createElement("h1");
 
     this.configureElement();
@@ -32,13 +31,12 @@ export default class Logo {
   private configureElement(): void {
     this.element.classList.add(CssClasses.LOGO);
 
-    this.imgElement.classList.add(CssClasses.LOGO_IMG);
-    this.imgElement.setAttribute("src", LogoImg);
-    this.imgElement.setAttribute("alt", LOGO_ALT_TEXT);
+    this.iconElement.classList.add(CssClasses.LOGO_IMG);
+    this.iconElement.innerHTML = LogoImg;
 
     this.titleElement.classList.add(CssClasses.LOGO_TITLE);
     this.titleElement.innerText = LOGO_TEXT;
 
-    this.element.append(this.imgElement, this.titleElement);
+    this.element.append(this.iconElement, this.titleElement);
   }
 }

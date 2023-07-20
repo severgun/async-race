@@ -11,7 +11,6 @@ enum CssClasses {
 
 const AUTHOR_LINK_TEXT = "Created by Sergey Vergun";
 const AUTHOR_LINK = "https://github.com/severgun";
-const AUTHOR_LINK_ICON_ALT = "GitHub Icon";
 
 export default class Footer {
   private element;
@@ -37,10 +36,9 @@ export default class Footer {
     authorLinkText.innerText = AUTHOR_LINK_TEXT;
     authorLinkText.classList.add(CssClasses.AUTHOR_LINK_TEXT);
 
-    const authorLinkIcon = document.createElement("img");
+    const authorLinkIcon = document.createElement("div");
     authorLinkIcon.classList.add(CssClasses.AUTHOR_LINK_ICON);
-    authorLinkIcon.src = GithubIcon;
-    authorLinkIcon.alt = AUTHOR_LINK_ICON_ALT;
+    authorLinkIcon.innerHTML = GithubIcon;
 
     authorLink.append(authorLinkIcon, authorLinkText);
 
