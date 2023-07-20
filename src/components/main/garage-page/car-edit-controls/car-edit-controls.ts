@@ -1,3 +1,4 @@
+import { AsyncRaceApi, Car } from "../../../../app/async-race-api";
 import { Button, ButtonParams } from "../../button/button";
 import "./car-edit-controls.css";
 
@@ -10,19 +11,6 @@ enum CssClasses {
   CAR_EDIT_CONTROLS_CREATE_BTN = "car-edit-controls__create-btn",
   CAR_EDIT_CONTROLS_UPDATE_BTN = "car-edit-controls__update-btn",
 }
-
-const createCarButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.CAR_EDIT_CONTROLS_CREATE_BTN],
-  text: "CREATE",
-  tooltip: "Create car with specified name and color",
-  callBack: () => {},
-};
-const updateCarButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.CAR_EDIT_CONTROLS_UPDATE_BTN],
-  text: "UPDATE",
-  tooltip: "Update color or name of selected car",
-  callBack: () => {},
-};
 
 export default class CarEditControls {
   private element;
@@ -39,7 +27,24 @@ export default class CarEditControls {
 
   private updateCarButton;
 
+  private updateGarageEvent = new Event("updateGarage", { bubbles: true });
+
+  private createCarBound = this.createCar.bind(this);
+
   constructor() {
+    const createCarButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.CAR_EDIT_CONTROLS_CREATE_BTN],
+      text: "CREATE",
+      tooltip: "Create car with specified name and color",
+      callBack: this.createCarBound,
+    };
+    const updateCarButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.CAR_EDIT_CONTROLS_UPDATE_BTN],
+      text: "UPDATE",
+      tooltip: "Update color or name of selected car",
+      callBack: () => {},
+    };
+
     this.element = document.createElement("div");
     this.createCarNameInput = document.createElement("input");
     this.updateCarNameInput = document.createElement("input");
@@ -81,5 +86,14 @@ export default class CarEditControls {
       this.updateCarColorPicker,
       this.updateCarButton.getHtmlElement(),
     );
+  }
+
+  private async createCar(): Promise<void> {
+    const carData: Pick<Car, "color" | "name"> = {
+      name: this.createCarNameInput.value,
+      color: this.createCarColorPicker.value,
+    };
+    await AsyncRaceApi.createCar(carData);
+    this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
   }
 }

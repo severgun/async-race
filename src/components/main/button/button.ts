@@ -27,5 +27,6 @@ export class Button {
     this.element.classList.add(CssClasses.BUTTON, ...params.cssClasses);
     this.element.innerText = params.text;
     this.element.title = params.tooltip;
+    this.element.addEventListener("click", params.callBack);
   }
 }

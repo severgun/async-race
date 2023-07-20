@@ -28,6 +28,9 @@ export default class GaragePage {
 
   private loadEventHandlerBound = this.loadEventHandler.bind(this);
 
+  private updateGarageEventHandlerBound =
+    this.updateGarageEventHandler.bind(this);
+
   constructor() {
     this.element = document.createElement("div");
     this.carEditControls = new CarEditControls();
@@ -71,6 +74,11 @@ export default class GaragePage {
       "DOMNodeInserted",
       this.loadEventHandlerBound,
     );
+
+    this.getHtmlElement().addEventListener(
+      "updateGarage",
+      this.updateGarageEventHandlerBound,
+    );
   }
 
   private async loadEventHandler(event: Event): Promise<void> {
@@ -79,5 +87,11 @@ export default class GaragePage {
       this.updateRaceLanesContainer(cars);
       console.log("garage loadEventHandler", event, cars);
     }
+  }
+
+  private async updateGarageEventHandler(event: Event): Promise<void> {
+    const cars = await AsyncRaceApi.getCars();
+    this.updateRaceLanesContainer(cars);
+    console.log("garage updateGarageEventHandler", event, cars);
   }
 }
