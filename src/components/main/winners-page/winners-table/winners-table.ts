@@ -12,14 +12,14 @@ export default class WinnersTable {
 
   constructor() {
     this.element = document.createElement("table");
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.WINNERS_TABLE);
     this.addTableHeader();
   }

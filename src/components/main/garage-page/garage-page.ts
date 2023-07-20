@@ -32,14 +32,14 @@ export default class GaragePage {
     this.paginationControls = new PaginationControls();
     this.raceLanesContainer = document.createElement("div");
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.GARAGE_PAGE);
 
     this.title.innerText = TITLE_TEXT;

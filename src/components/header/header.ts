@@ -22,14 +22,14 @@ export default class Header {
     this.logo = new Logo();
     this.nav = new Nav(main);
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.append(this.logo.getElement(), this.nav.getHtmlElement());
   }
 }

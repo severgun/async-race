@@ -22,14 +22,14 @@ export default class WinnersPage {
     this.paginationControls = new PaginationControls();
     this.table = new WinnersTable();
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.WINNERS_PAGE);
     this.title.classList.add(CssClasses.WINNERS_TITLE);
     this.title.innerText = TITLE_TEXT;

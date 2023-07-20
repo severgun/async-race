@@ -20,14 +20,14 @@ export default class Footer {
     this.element = document.createElement("footer");
     this.element.classList.add(CssClasses.WRAPPER, CssClasses.FOOTER);
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     const authorLink = document.createElement("a");
     authorLink.classList.add(CssClasses.AUTHOR_LINK);
     authorLink.href = AUTHOR_LINK;

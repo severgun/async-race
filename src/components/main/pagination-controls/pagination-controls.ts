@@ -36,14 +36,14 @@ export default class PaginationControls {
     this.nextPageButton = new Button(nextPageButtonParams);
     this.currentPageNum = document.createElement("p");
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.PAGINATION_CONTROLS);
     this.currentPageNum.classList.add(CssClasses.PAGINATION_CURRENT_NUM);
     this.currentPageNum.innerText = "1";

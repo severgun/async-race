@@ -47,14 +47,14 @@ export default class CarEditControls {
     this.updateCarColorPicker = document.createElement("input");
     this.createCarButton = new Button(createCarButtonParams);
     this.updateCarButton = new Button(updateCarButtonParams);
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.CAR_EDIT_CONTROLS);
 
     this.createCarNameInput.classList.add(

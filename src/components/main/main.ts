@@ -21,7 +21,7 @@ export default class Main {
 
     this.winnersPage = new WinnersPage();
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
@@ -36,7 +36,7 @@ export default class Main {
     return this.winnersPage;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.WRAPPER, CssClasses.MAIN);
     this.element.append(this.garagePage.getHtmlElement());
   }

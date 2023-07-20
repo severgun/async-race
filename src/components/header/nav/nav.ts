@@ -33,7 +33,7 @@ export default class Nav {
     this.list = document.createElement("ul");
     this.list.classList.add(CssClasses.NAV_LIST);
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
@@ -50,7 +50,7 @@ export default class Nav {
     this.main.getHtmlElement().replaceChildren(winnersPage.getHtmlElement());
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     const garageLink = document.createElement("li");
     garageLink.classList.add(CssClasses.NAV_ITEM);
     garageLink.innerText = NavButtons.GARAGE;

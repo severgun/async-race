@@ -22,14 +22,14 @@ export default class Logo {
     this.imgElement = document.createElement("img");
     this.titleElement = document.createElement("h1");
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.LOGO);
 
     this.imgElement.classList.add(CssClasses.LOGO_IMG);

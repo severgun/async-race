@@ -44,14 +44,14 @@ export default class GarageControls {
     this.resetButton = new Button(resetButtonParams);
     this.generateCarsButton = new Button(generateCarsButtonParams);
 
-    this.configureElem();
+    this.configureElement();
   }
 
   getHtmlElement(): HTMLElement {
     return this.element;
   }
 
-  private configureElem(): void {
+  private configureElement(): void {
     this.element.classList.add(CssClasses.GARAGE_CONTROLS);
     this.element.append(
       this.raceButton.getHtmlElement(),
