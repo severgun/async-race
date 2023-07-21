@@ -33,6 +33,8 @@ export default class CarEditControls {
 
   private selectedCar: Car | null = null;
 
+  private setSelectedCarBound = this.setSelectedCar.bind(this);
+
   private createCarBound = this.createCar.bind(this);
 
   private updateCarBound = this.updateCar.bind(this);
@@ -65,16 +67,17 @@ export default class CarEditControls {
     return this.element;
   }
 
-  setSelectedCar(car: Car): void {
-    console.log("CAR-edit", car);
-    this.selectedCar = car;
-    this.updateCarNameInput.value = this.selectedCar.name;
-    this.updateCarColorPicker.value = this.selectedCar.color;
-
-    this.updateCarNameInput.disabled = false;
-    this.updateCarColorPicker.disabled = false;
-    (this.updateCarButton.getHtmlElement() as HTMLButtonElement).disabled =
-      false;
+  private setSelectedCar(event: Event): void {
+    if (event instanceof CustomEvent) {
+      const car: Car = event.detail;
+      this.selectedCar = car;
+      this.updateCarNameInput.value = this.selectedCar.name;
+      this.updateCarColorPicker.value = this.selectedCar.color;
+      this.updateCarNameInput.disabled = false;
+      this.updateCarColorPicker.disabled = false;
+      (this.updateCarButton.getHtmlElement() as HTMLButtonElement).disabled =
+        false;
+    }
   }
 
   private configureElement(): void {
@@ -108,6 +111,8 @@ export default class CarEditControls {
       this.updateCarColorPicker,
       this.updateCarButton.getHtmlElement(),
     );
+
+    document.addEventListener("carSelected", this.setSelectedCarBound);
   }
 
   private async createCar(): Promise<void> {

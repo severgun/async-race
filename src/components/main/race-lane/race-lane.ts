@@ -3,7 +3,6 @@ import finishFlagIcon from "../../../assets/logo.svg";
 import carIcon from "../../../assets/tractor-side-view-svgrepo-com.svg";
 import { Button, ButtonParams } from "../button/button";
 import { Car } from "../../../app/async-race-api";
-import GaragePage from "../garage-page/garage-page";
 
 enum CssClasses {
   RACE_LANE = "race-lane",
@@ -40,12 +39,12 @@ export default class RaceLane {
 
   private finishFlag;
 
-  private garagePage;
+  private carSelectedEvent;
 
   private selectButtonClickHandlerBound =
     this.selectButtonClickHandler.bind(this);
 
-  constructor(garagePage: GaragePage, car: Car) {
+  constructor(car: Car) {
     const selectButtonParams: ButtonParams = {
       cssClasses: [CssClasses.SELECT_BUTTON],
       text: "SELECT",
@@ -80,11 +79,14 @@ export default class RaceLane {
     this.carImg = document.createElement("div");
     this.finishFlag = document.createElement("div");
     this.car = car;
-    this.garagePage = garagePage;
     this.selectButton = new Button(selectButtonParams);
     this.removeButton = new Button(removeButtonParams);
     this.runEngButton = new Button(runEngineButtonParams);
     this.stopEngButton = new Button(stopEngineButtonParams);
+    this.carSelectedEvent = new CustomEvent("carSelected", {
+      bubbles: true,
+      detail: this.car,
+    });
 
     this.configureElement();
   }
@@ -127,6 +129,6 @@ export default class RaceLane {
 
   private selectButtonClickHandler(): void {
     console.log("CLICK SELECT", this.car);
-    this.garagePage.setSelectedCar(this.car);
+    this.getHtmlElement().dispatchEvent(this.carSelectedEvent);
   }
 }

@@ -46,14 +46,10 @@ export default class GaragePage {
     return this.element;
   }
 
-  setSelectedCar(car: Car): void {
-    this.carEditControls.setSelectedCar(car);
-  }
-
   updateRaceLanesContainer(cars: Car[]): void {
     this.raceLanesContainer.replaceChildren();
     cars.forEach((car) => {
-      const raceLane = new RaceLane(this, car);
+      const raceLane = new RaceLane(car);
       this.raceLanesContainer.append(raceLane.getHtmlElement());
     });
   }
