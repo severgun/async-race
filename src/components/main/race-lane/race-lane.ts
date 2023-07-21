@@ -2,7 +2,7 @@ import "./race-lane.css";
 import finishFlagIcon from "../../../assets/logo.svg";
 import carIcon from "../../../assets/tractor-side-view-svgrepo-com.svg";
 import { Button, ButtonParams } from "../button/button";
-import { Car } from "../../../app/async-race-api";
+import { AsyncRaceApi, Car } from "../../../app/async-race-api";
 
 enum CssClasses {
   RACE_LANE = "race-lane",
@@ -41,8 +41,13 @@ export default class RaceLane {
 
   private carSelectedEvent;
 
+  private updateGarageEvent = new Event("updateGarage", { bubbles: true });
+
   private selectButtonClickHandlerBound =
     this.selectButtonClickHandler.bind(this);
+
+  private removeButtonClickHandlerBound =
+    this.removeButtonClickHandler.bind(this);
 
   constructor(car: Car) {
     const selectButtonParams: ButtonParams = {
@@ -56,7 +61,7 @@ export default class RaceLane {
       cssClasses: [CssClasses.REMOVE_BUTTON],
       text: "REMOVE",
       tooltip: "Remove car",
-      callBack: () => {},
+      callBack: this.removeButtonClickHandlerBound,
     };
 
     const runEngineButtonParams: ButtonParams = {
@@ -130,5 +135,14 @@ export default class RaceLane {
   private selectButtonClickHandler(): void {
     console.log("CLICK SELECT", this.car);
     this.getHtmlElement().dispatchEvent(this.carSelectedEvent);
+  }
+
+  private async removeButtonClickHandler(): Promise<void> {
+    console.log("CLICK REMOVE", this.car);
+
+    await AsyncRaceApi.deleteCar(this.car.id);
+    await AsyncRaceApi.deleteWinner(this.car.id);
+
+    this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
   }
 }
