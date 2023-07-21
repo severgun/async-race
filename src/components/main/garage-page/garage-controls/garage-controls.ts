@@ -1,5 +1,8 @@
 import { Button, ButtonParams } from "../../button/button";
 import "./garage-controls.css";
+import getRandomCarName from "../../../../utils/getRandomCarName";
+import { AsyncRaceApi } from "../../../../app/async-race-api";
+import getRandomColorHex from "../../../../utils/getRandomColor";
 
 enum CssClasses {
   GARAGE_CONTROLS = "garage-controls",
@@ -8,26 +11,7 @@ enum CssClasses {
   GENERATE_CARS_BUTTON = "generate-cars-button",
 }
 
-const raceButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.RACE_BUTTON],
-  text: "RACE",
-  tooltip: "Start race",
-  callBack: () => {},
-};
-
-const resetButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.RESET_BUTTON],
-  text: "RESET",
-  tooltip: "Reset race",
-  callBack: () => {},
-};
-
-const generateCarsButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.GENERATE_CARS_BUTTON],
-  text: "GENERATE CARS",
-  tooltip: "Generate random cars",
-  callBack: () => {},
-};
+const GENERATE_CARS_COUNT = 100;
 
 export default class GarageControls {
   private element;
@@ -38,7 +22,33 @@ export default class GarageControls {
 
   private generateCarsButton;
 
+  private generateCarsButtonHandlerBound =
+    this.generateCarsButtonHandler.bind(this);
+
+  private updateGarageEvent = new Event("updateGarage", { bubbles: true });
+
   constructor() {
+    const raceButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.RACE_BUTTON],
+      text: "RACE",
+      tooltip: "Start race",
+      callBack: () => {},
+    };
+
+    const resetButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.RESET_BUTTON],
+      text: "RESET",
+      tooltip: "Reset race",
+      callBack: () => {},
+    };
+
+    const generateCarsButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.GENERATE_CARS_BUTTON],
+      text: "GENERATE CARS",
+      tooltip: "Generate random cars",
+      callBack: this.generateCarsButtonHandlerBound,
+    };
+
     this.element = document.createElement("div");
     this.raceButton = new Button(raceButtonParams);
     this.resetButton = new Button(resetButtonParams);
@@ -49,6 +59,20 @@ export default class GarageControls {
 
   getHtmlElement(): HTMLElement {
     return this.element;
+  }
+
+  private async generateCarsButtonHandler(): Promise<void> {
+    const results = new Array(GENERATE_CARS_COUNT);
+    for (let index = 0; index < GENERATE_CARS_COUNT; index += 1) {
+      const name = getRandomCarName();
+      const color = getRandomColorHex();
+      results[index] = AsyncRaceApi.createCar({
+        name,
+        color,
+      });
+    }
+    await Promise.all(results);
+    this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
   }
 
   private configureElement(): void {
