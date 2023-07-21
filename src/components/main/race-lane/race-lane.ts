@@ -3,6 +3,7 @@ import finishFlagIcon from "../../../assets/logo.svg";
 import carIcon from "../../../assets/tractor-side-view-svgrepo-com.svg";
 import { Button, ButtonParams } from "../button/button";
 import { Car } from "../../../app/async-race-api";
+import GaragePage from "../garage-page/garage-page";
 
 enum CssClasses {
   RACE_LANE = "race-lane",
@@ -17,34 +18,6 @@ enum CssClasses {
   RUN_ENGINE_BUTTON = "run-eng-btn",
   STOP_ENGINE_BUTTON = "stop-eng-btn",
 }
-
-const selectButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.SELECT_BUTTON],
-  text: "SELECT",
-  tooltip: "Select car",
-  callBack: () => {},
-};
-
-const removeButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.REMOVE_BUTTON],
-  text: "REMOVE",
-  tooltip: "Remove car",
-  callBack: () => {},
-};
-
-const runEngineButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.RUN_ENGINE_BUTTON],
-  text: "R",
-  tooltip: "Run engine",
-  callBack: () => {},
-};
-
-const stopEngineButtonParams: ButtonParams = {
-  cssClasses: [CssClasses.STOP_ENGINE_BUTTON],
-  text: "S",
-  tooltip: "Stop engine",
-  callBack: () => {},
-};
 
 export default class RaceLane {
   private element;
@@ -67,13 +40,47 @@ export default class RaceLane {
 
   private finishFlag;
 
-  constructor(car: Car) {
+  private garagePage;
+
+  private selectButtonClickHandlerBound =
+    this.selectButtonClickHandler.bind(this);
+
+  constructor(garagePage: GaragePage, car: Car) {
+    const selectButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.SELECT_BUTTON],
+      text: "SELECT",
+      tooltip: "Select car",
+      callBack: this.selectButtonClickHandlerBound,
+    };
+
+    const removeButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.REMOVE_BUTTON],
+      text: "REMOVE",
+      tooltip: "Remove car",
+      callBack: () => {},
+    };
+
+    const runEngineButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.RUN_ENGINE_BUTTON],
+      text: "R",
+      tooltip: "Run engine",
+      callBack: () => {},
+    };
+
+    const stopEngineButtonParams: ButtonParams = {
+      cssClasses: [CssClasses.STOP_ENGINE_BUTTON],
+      text: "S",
+      tooltip: "Stop engine",
+      callBack: () => {},
+    };
+
     this.element = document.createElement("div");
     this.carName = document.createElement("p");
     this.track = document.createElement("div");
     this.carImg = document.createElement("div");
     this.finishFlag = document.createElement("div");
     this.car = car;
+    this.garagePage = garagePage;
     this.selectButton = new Button(selectButtonParams);
     this.removeButton = new Button(removeButtonParams);
     this.runEngButton = new Button(runEngineButtonParams);
@@ -116,5 +123,10 @@ export default class RaceLane {
     );
 
     this.element.append(firstRow, secondRow);
+  }
+
+  private selectButtonClickHandler(): void {
+    console.log("CLICK SELECT", this.car);
+    this.garagePage.setSelectedCar(this.car);
   }
 }

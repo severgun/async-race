@@ -12,6 +12,8 @@ enum CssClasses {
   CAR_EDIT_CONTROLS_UPDATE_BTN = "car-edit-controls__update-btn",
 }
 
+const DEFAULT_COLOR = "#ffffff";
+
 export default class CarEditControls {
   private element;
 
@@ -29,7 +31,11 @@ export default class CarEditControls {
 
   private updateGarageEvent = new Event("updateGarage", { bubbles: true });
 
+  private selectedCar: Car | null = null;
+
   private createCarBound = this.createCar.bind(this);
+
+  private updateCarBound = this.updateCar.bind(this);
 
   constructor() {
     const createCarButtonParams: ButtonParams = {
@@ -42,7 +48,7 @@ export default class CarEditControls {
       cssClasses: [CssClasses.CAR_EDIT_CONTROLS_UPDATE_BTN],
       text: "UPDATE",
       tooltip: "Update color or name of selected car",
-      callBack: () => {},
+      callBack: this.updateCarBound,
     };
 
     this.element = document.createElement("div");
@@ -59,24 +65,40 @@ export default class CarEditControls {
     return this.element;
   }
 
+  setSelectedCar(car: Car): void {
+    console.log("CAR-edit", car);
+    this.selectedCar = car;
+    this.updateCarNameInput.value = this.selectedCar.name;
+    this.updateCarColorPicker.value = this.selectedCar.color;
+
+    this.updateCarNameInput.disabled = false;
+    this.updateCarColorPicker.disabled = false;
+    (this.updateCarButton.getHtmlElement() as HTMLButtonElement).disabled =
+      false;
+  }
+
   private configureElement(): void {
     this.element.classList.add(CssClasses.CAR_EDIT_CONTROLS);
 
     this.createCarNameInput.classList.add(
       CssClasses.CAR_EDIT_CONTROLS_CREATE_NAME_INP,
     );
-    this.updateCarNameInput.classList.add(
-      CssClasses.CAR_EDIT_CONTROLS_UPDATE_NAME_INP,
-    );
-
     this.createCarColorPicker.type = "color";
     this.createCarColorPicker.classList.add(
       CssClasses.CAR_EDIT_CONTROLS_CREATE_COLOR,
     );
+
+    this.updateCarNameInput.classList.add(
+      CssClasses.CAR_EDIT_CONTROLS_UPDATE_NAME_INP,
+    );
+    this.updateCarNameInput.disabled = true;
     this.updateCarColorPicker.type = "color";
     this.updateCarColorPicker.classList.add(
       CssClasses.CAR_EDIT_CONTROLS_UPDATE_COLOR,
     );
+    this.updateCarColorPicker.disabled = true;
+    (this.updateCarButton.getHtmlElement() as HTMLButtonElement).disabled =
+      true;
 
     this.element.append(
       this.createCarNameInput,
@@ -95,5 +117,32 @@ export default class CarEditControls {
     };
     await AsyncRaceApi.createCar(carData);
     this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
+  }
+
+  private async updateCar(): Promise<void> {
+    console.log(
+      "UPDATE",
+      this.updateCarNameInput.value,
+      this.updateCarColorPicker.value,
+    );
+    if (this.selectedCar !== null) {
+      const carData: Pick<Car, "color" | "name"> = {
+        name: this.updateCarNameInput.value,
+        color: this.updateCarColorPicker.value,
+      };
+      await AsyncRaceApi.updateCar(this.selectedCar.id, carData);
+      this.resetCarSelection();
+      this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
+    }
+  }
+
+  private resetCarSelection(): void {
+    this.selectedCar = null;
+    this.updateCarNameInput.value = "";
+    this.updateCarNameInput.disabled = true;
+    this.updateCarColorPicker.value = DEFAULT_COLOR;
+    this.updateCarColorPicker.disabled = true;
+    (this.updateCarButton.getHtmlElement() as HTMLButtonElement).disabled =
+      true;
   }
 }
