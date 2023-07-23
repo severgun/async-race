@@ -206,9 +206,24 @@ export class AsyncRaceApi {
       );
 
       if (!response.ok) {
-        throw new Error(
-          `Network response was not OK. ${response.status} ${response.statusText}`,
-        );
+        switch (response.status) {
+          case 400:
+            throw new Error(
+              `Network response was not OK. ${response.status} Wrong parameters: "id" should be any positive number, "status" should be "started", "stopped" or "drive"`,
+            );
+            break;
+          case 404:
+            throw new Error(
+              `Network response was not OK. ${response.status} Car with such id was not found in the garage.`,
+            );
+            break;
+
+          default:
+            throw new Error(
+              `Network response was not OK. ${response.status} ${response.statusText}`,
+            );
+            break;
+        }
       }
 
       return await response.json();
@@ -218,7 +233,7 @@ export class AsyncRaceApi {
     }
   }
 
-  static async engineDrive(id: number): Promise<SuccessResp | null> {
+  static async engineDrive(id: number): Promise<SuccessResp> {
     try {
       const response = await fetch(
         `${baseApiURL}/${ApiPath.ENGINE}?id=${id}&status=${EngineStatus.DRIVE}`,
@@ -226,15 +241,40 @@ export class AsyncRaceApi {
       );
 
       if (!response.ok) {
-        throw new Error(
-          `Engine Drive request failed. Network response was not OK. ${response.status}`,
-        );
+        switch (response.status) {
+          case 400:
+            throw new Error(
+              `Network response was not OK. ${response.status} Wrong parameters: "id" should be any positive number, "status" should be "started", "stopped" or "drive"`,
+            );
+            break;
+          case 404:
+            throw new Error(
+              `Network response was not OK. ${response.status} Engine parameters for car with such id was not found in the garage. Have you tried to set engine status to "started" before?`,
+            );
+            break;
+          case 429:
+            throw new Error(
+              `Network response was not OK. ${response.status} Drive already in progress. You can't run drive for the same car twice while it's not stopped.`,
+            );
+            break;
+          case 500:
+            throw new Error(
+              `Network response was not OK. ${response.status} Car has been stopped suddenly. It's engine was broken down.`,
+            );
+            break;
+
+          default:
+            throw new Error(
+              `Network response was not OK. ${response.status} ${response.statusText}`,
+            );
+            break;
+        }
       }
 
       return await response.json();
     } catch (error) {
-      console.log("Engine Drive request failed to execute.", error);
-      return null;
+      console.log("Engine Drive request failed.", error);
+      throw error;
     }
   }
 
