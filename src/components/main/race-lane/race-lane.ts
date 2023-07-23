@@ -39,6 +39,10 @@ export default class RaceLane {
 
   private finishFlag;
 
+  private engineRunning;
+
+  private animationIntervalId;
+
   private carSelectedEvent;
 
   private updateGarageEvent = new Event("updateGarage", { bubbles: true });
@@ -68,14 +72,14 @@ export default class RaceLane {
       cssClasses: [CssClasses.RUN_ENGINE_BUTTON],
       text: "R",
       tooltip: "Run engine",
-      callBack: () => {},
+      callBack: this.race.bind(this),
     };
 
     const stopEngineButtonParams: ButtonParams = {
       cssClasses: [CssClasses.STOP_ENGINE_BUTTON],
       text: "S",
       tooltip: "Stop engine",
-      callBack: () => {},
+      callBack: this.reset.bind(this),
     };
 
     this.element = document.createElement("div");
@@ -84,6 +88,8 @@ export default class RaceLane {
     this.carImg = document.createElement("div");
     this.finishFlag = document.createElement("div");
     this.car = car;
+    this.engineRunning = false;
+    this.animationIntervalId = -1;
     this.selectButton = new Button(selectButtonParams);
     this.removeButton = new Button(removeButtonParams);
     this.runEngButton = new Button(runEngineButtonParams);
@@ -144,5 +150,44 @@ export default class RaceLane {
     await AsyncRaceApi.deleteWinner(this.car.id);
 
     this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
+  }
+
+  private async race(): Promise<void> {
+    if (!this.engineRunning) {
+      const startResponse = await AsyncRaceApi.engineStart(this.car.id);
+      if (startResponse !== null) {
+        const time = startResponse.distance / startResponse.velocity;
+        this.engineRunning = true;
+        AsyncRaceApi.engineDrive(this.car.id).catch((error) => {
+          if (error.message.includes("500")) {
+            clearInterval(this.animationIntervalId);
+          }
+        });
+        this.animateCar(time);
+      }
+    }
+  }
+
+  private async reset(): Promise<void> {
+    clearInterval(this.animationIntervalId);
+    this.carImg.style.left = "0px";
+    this.engineRunning = false;
+    AsyncRaceApi.engineStop(this.car.id);
+  }
+
+  private animateCar(time: number): void {
+    const FRAME_TIME = 1000 / 60;
+
+    const distance = this.finishFlag.offsetLeft + this.finishFlag.offsetWidth;
+
+    const perFrameDistance = distance / (time / FRAME_TIME);
+    let currentPos = 0;
+    this.animationIntervalId = window.setInterval(() => {
+      if (currentPos >= distance || !this.engineRunning) {
+        clearInterval(this.animationIntervalId);
+      }
+      this.carImg.style.left = `${currentPos}px`;
+      currentPos += perFrameDistance;
+    }, FRAME_TIME);
   }
 }
