@@ -1,5 +1,5 @@
 const baseApiURL = "http://127.0.0.1:3000";
-enum ApiPath {
+export enum ApiPath {
   GARAGE = "garage",
   ENGINE = "engine",
   WINNERS = "winners",
@@ -94,6 +94,14 @@ export class AsyncRaceApi {
     return response.json();
   }
 
+  static async getCarsTotalCount(): Promise<string | null> {
+    // Send any _limit count to get X-Total-Count header in response.
+    const response = await fetch(`${baseApiURL}/${ApiPath.GARAGE}/?_limit=1`, {
+      method: "GET",
+    });
+    return response.headers.get("X-Total-Count");
+  }
+
   static async engineStart(id: number): Promise<EngineResp> {
     const response = await fetch(
       `${baseApiURL}/${ApiPath.ENGINE}?id=${id}&status=${EngineStatus.STARTED}`,
@@ -165,5 +173,13 @@ export class AsyncRaceApi {
       body: JSON.stringify(winnerData),
     });
     return response.json();
+  }
+
+  static async getWinnersTotalCount(): Promise<string | null> {
+    // Send any _limit count to get X-Total-Count header in response.
+    const response = await fetch(`${baseApiURL}/${ApiPath.WINNERS}/?_limit=1`, {
+      method: "GET",
+    });
+    return response.headers.get("X-Total-Count");
   }
 }
