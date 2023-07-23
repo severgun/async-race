@@ -112,7 +112,9 @@ export default class GaragePage {
       this.title.classList.add(CssClasses.GARAGE_PAGE_TITLE);
 
       const cars = await AsyncRaceApi.getCars(requestParams);
-      this.updateRaceLanesContainer(cars);
+      if (cars !== null) {
+        this.updateRaceLanesContainer(cars);
+      }
     }
   }
 
@@ -126,7 +128,9 @@ export default class GaragePage {
       page: this.currentPage,
     };
     const cars = await AsyncRaceApi.getCars(requestParams);
-    this.updateRaceLanesContainer(cars);
+    if (cars !== null) {
+      this.updateRaceLanesContainer(cars);
+    }
     console.log("garage updateGarageEventHandler", event, cars);
   }
 
@@ -141,7 +145,9 @@ export default class GaragePage {
       const cars = await AsyncRaceApi.getCars(requestParams);
       console.log("EVENT", event.detail, requestParams, cars);
       AsyncRaceApi.getCarsTotalCount();
-      this.updateRaceLanesContainer(cars);
+      if (cars !== null) {
+        this.updateRaceLanesContainer(cars);
+      }
     }
   }
 }
