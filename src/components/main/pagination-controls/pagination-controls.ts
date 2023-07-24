@@ -67,6 +67,11 @@ export default class PaginationControls {
     return this.element;
   }
 
+  disableControls(value: boolean): void {
+    this.prevPageButton.getHtmlElement().disabled = value;
+    this.nextPageButton.getHtmlElement().disabled = value;
+  }
+
   private configureElement(): void {
     this.element.classList.add(CssClasses.PAGINATION_CONTROLS);
     this.currentPageNumElement.classList.add(CssClasses.PAGINATION_CURRENT_NUM);

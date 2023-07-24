@@ -48,7 +48,7 @@ export default class Nav {
   private winnersLinkClickHandler() {
     const winnersPage = this.main.getWinnersPage();
     this.main.getHtmlElement().replaceChildren(winnersPage.getHtmlElement());
-    winnersPage.updateWinnersTable();
+    winnersPage.updateWinnersPageContent();
   }
 
   private configureElement(): void {

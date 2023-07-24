@@ -3,6 +3,7 @@ import {
   ApiPath,
   Car,
   WinnersRequestParams,
+  Winner,
 } from "../../../app/async-race-api";
 import PaginationControls from "../pagination-controls/pagination-controls";
 import WinnersTable from "./winners-table/winners-table";
@@ -29,6 +30,9 @@ export default class WinnersPage {
   private currentPage;
 
   private totalWinnersCount: string | null;
+
+  private currentPageChangedEventHandlerBound =
+    this.currentPageChangedEventHandler.bind(this);
 
   constructor() {
     this.element = document.createElement("div");
@@ -57,24 +61,30 @@ export default class WinnersPage {
       this.table.getHtmlElement(),
     );
 
-    this.loadPageContent();
+    this.getHtmlElement().addEventListener(
+      "currentPageChanged",
+      this.currentPageChangedEventHandlerBound,
+    );
+
+    this.updateWinnersPageContent();
   }
 
-  private async loadPageContent(): Promise<void> {
+  async updateWinnersPageContent(): Promise<void> {
     this.totalWinnersCount = await AsyncRaceApi.getWinnersTotalCount();
     this.title.innerText = `${TITLE_TEXT}(${this.totalWinnersCount})`;
     this.title.classList.add(CssClasses.WINNERS_TITLE);
 
-    this.updateWinnersTable();
-  }
-
-  async updateWinnersTable(): Promise<void> {
-    this.table.clearTable();
     const requestParams: WinnersRequestParams = {
       limit: ITEMS_PER_PAGE,
       page: this.currentPage,
     };
     const winners = await AsyncRaceApi.getWinners(requestParams);
+    this.updateWinnersTable(winners);
+  }
+
+  private async updateWinnersTable(winners: Winner[] | null): Promise<void> {
+    this.table.clearTable();
+
     if (winners !== null) {
       const promises: Promise<Car | null>[] = [];
       winners.forEach((winner) => {
@@ -100,6 +110,22 @@ export default class WinnersPage {
           newRow.innerHTML = tableRowTemplate;
         }
       });
+    }
+  }
+
+  private async currentPageChangedEventHandler(event: Event): Promise<void> {
+    if (event instanceof CustomEvent) {
+      this.currentPage = event.detail.currentPageNumValue;
+
+      const requestParams: WinnersRequestParams = {
+        limit: ITEMS_PER_PAGE,
+        page: this.currentPage,
+      };
+      const winners = await AsyncRaceApi.getWinners(requestParams);
+      AsyncRaceApi.getWinnersTotalCount();
+      if (winners !== null) {
+        this.updateWinnersTable(winners);
+      }
     }
   }
 }
