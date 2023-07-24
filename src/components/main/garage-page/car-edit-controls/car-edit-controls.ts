@@ -125,11 +125,6 @@ export default class CarEditControls {
   }
 
   private async updateCar(): Promise<void> {
-    console.log(
-      "UPDATE",
-      this.updateCarNameInput.value,
-      this.updateCarColorPicker.value,
-    );
     if (this.selectedCar !== null) {
       const carData: Pick<Car, "color" | "name"> = {
         name: this.updateCarNameInput.value,
