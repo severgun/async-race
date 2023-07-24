@@ -183,10 +183,14 @@ export default class RaceLane {
   }
 
   private async removeButtonClickHandler(): Promise<void> {
-    console.log("CLICK REMOVE", this.car);
+    const winners = await AsyncRaceApi.getWinners();
+    const inWinners =
+      winners?.find((winner) => winner.id === this.car.id) !== undefined;
 
     await AsyncRaceApi.deleteCar(this.car.id);
-    await AsyncRaceApi.deleteWinner(this.car.id);
+    if (inWinners) {
+      await AsyncRaceApi.deleteWinner(this.car.id);
+    }
 
     this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
   }
