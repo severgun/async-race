@@ -124,13 +124,14 @@ export default class RaceLane {
     }
   }
 
-  async reset(): Promise<void> {
-    clearInterval(this.animationIntervalId);
-    this.toggleDisableRunEngButton();
-    this.toggleDisableStopEngButton();
-    this.carImg.style.left = "0px";
-    this.engineRunning = false;
-    AsyncRaceApi.engineStop(this.car.id);
+  reset(): void {
+    AsyncRaceApi.engineStop(this.car.id).then(() => {
+      clearInterval(this.animationIntervalId);
+      this.toggleDisableRunEngButton();
+      this.toggleDisableStopEngButton();
+      this.carImg.style.left = "0px";
+      this.engineRunning = false;
+    });
   }
 
   toggleDisableRunEngButton(): void {
