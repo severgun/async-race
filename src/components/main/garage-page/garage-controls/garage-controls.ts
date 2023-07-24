@@ -27,19 +27,29 @@ export default class GarageControls {
 
   private updateGarageEvent = new Event("updateGarage", { bubbles: true });
 
+  private startRaceGarageEvent = new Event("startRaceGarage", {
+    bubbles: true,
+  });
+
+  private stopRaceGarageEvent = new Event("stopRaceGarage", { bubbles: true });
+
   constructor() {
     const raceButtonParams: ButtonParams = {
       cssClasses: [CssClasses.RACE_BUTTON],
       text: "RACE",
       tooltip: "Start race",
-      callBack: () => {},
+      callBack: () => {
+        this.getHtmlElement().dispatchEvent(this.startRaceGarageEvent);
+      },
     };
 
     const resetButtonParams: ButtonParams = {
       cssClasses: [CssClasses.RESET_BUTTON],
       text: "RESET",
       tooltip: "Reset race",
-      callBack: () => {},
+      callBack: () => {
+        this.getHtmlElement().dispatchEvent(this.stopRaceGarageEvent);
+      },
     };
 
     const generateCarsButtonParams: ButtonParams = {

@@ -106,6 +106,29 @@ export default class RaceLane {
     return this.element;
   }
 
+  async race(): Promise<void> {
+    if (!this.engineRunning) {
+      const startResponse = await AsyncRaceApi.engineStart(this.car.id);
+      if (startResponse !== null) {
+        const time = startResponse.distance / startResponse.velocity;
+        this.engineRunning = true;
+        AsyncRaceApi.engineDrive(this.car.id).catch((error) => {
+          if (error.message.includes("500")) {
+            clearInterval(this.animationIntervalId);
+          }
+        });
+        this.animateCar(time);
+      }
+    }
+  }
+
+  async reset(): Promise<void> {
+    clearInterval(this.animationIntervalId);
+    this.carImg.style.left = "0px";
+    this.engineRunning = false;
+    AsyncRaceApi.engineStop(this.car.id);
+  }
+
   private configureElement(): void {
     this.element.classList.add(CssClasses.RACE_LANE);
     this.carName.classList.add(CssClasses.RACE_LANE_CAR_NAME);
@@ -150,29 +173,6 @@ export default class RaceLane {
     await AsyncRaceApi.deleteWinner(this.car.id);
 
     this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
-  }
-
-  private async race(): Promise<void> {
-    if (!this.engineRunning) {
-      const startResponse = await AsyncRaceApi.engineStart(this.car.id);
-      if (startResponse !== null) {
-        const time = startResponse.distance / startResponse.velocity;
-        this.engineRunning = true;
-        AsyncRaceApi.engineDrive(this.car.id).catch((error) => {
-          if (error.message.includes("500")) {
-            clearInterval(this.animationIntervalId);
-          }
-        });
-        this.animateCar(time);
-      }
-    }
-  }
-
-  private async reset(): Promise<void> {
-    clearInterval(this.animationIntervalId);
-    this.carImg.style.left = "0px";
-    this.engineRunning = false;
-    AsyncRaceApi.engineStop(this.car.id);
   }
 
   private animateCar(time: number): void {
