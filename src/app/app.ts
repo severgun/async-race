@@ -1,7 +1,7 @@
 import Header from "../components/header/header";
 import Main from "../components/main/main";
 import Footer from "../components/footer/footer";
-import FavIcon from "../assets/logo.svg";
+import FavIcon from "../assets/favIcon.png";
 
 export default class App {
   private favicon;
@@ -21,9 +21,8 @@ export default class App {
 
   private setFavicon(icon: string) {
     const headTitle: HTMLElement | null = document.querySelector("head");
-    this.favicon = document.createElement("link");
-    this.favicon.setAttribute("rel", "shortcut icon");
-    this.favicon.setAttribute("href", icon);
+    this.favicon.rel = "shortcut icon";
+    this.favicon.href = icon;
     headTitle?.appendChild(this.favicon);
   }
 
