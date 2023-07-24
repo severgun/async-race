@@ -7,7 +7,7 @@ import {
   Car,
   CarsRequestParams,
 } from "../../../app/async-race-api";
-import RaceLane from "../race-lane/race-lane";
+import { FinishedCar, RaceLane } from "../race-lane/race-lane";
 import PaginationControls from "../pagination-controls/pagination-controls";
 
 enum CssClasses {
@@ -168,8 +168,18 @@ export default class GaragePage {
   private async startRaceGarageEventHandler(): Promise<void> {
     this.garageControls.toggleDisableRaceButton();
     this.garageControls.toggleDisableResetButton();
+    // this.raceLanesOnPage.forEach((lane) => {
+    //   lane.race();
+    // });
+    const promises: Promise<FinishedCar | undefined>[] = [];
     this.raceLanesOnPage.forEach((lane) => {
-      lane.race();
+      promises.push(lane.race());
+    });
+
+    Promise.any(promises).then((winner) => {
+      if (winner !== undefined) {
+        this.setWinner(winner);
+      }
     });
   }
 
@@ -179,5 +189,21 @@ export default class GaragePage {
     this.raceLanesOnPage.forEach((lane) => {
       lane.reset();
     });
+  }
+
+  private async setWinner(winner: FinishedCar): Promise<void> {
+    const winners = await AsyncRaceApi.getWinners();
+    const recordInDb = winners?.find((element) => element.id === winner.id);
+    let wins = 1;
+    const { id, time } = winner;
+    const timeInSeconds = +(time / 1000).toFixed(2);
+    if (recordInDb !== undefined) {
+      wins = recordInDb.wins + 1;
+      const recordTime =
+        recordInDb.time < timeInSeconds ? recordInDb.time : timeInSeconds;
+      AsyncRaceApi.updateWinner(id, { time: recordTime, wins });
+    } else {
+      AsyncRaceApi.createWinner({ id, time: timeInSeconds, wins });
+    }
   }
 }

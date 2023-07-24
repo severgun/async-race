@@ -91,11 +91,11 @@ export default class WinnersPage {
           carImg.style.fill = car.color;
 
           const tableRowTemplate = `
-                <td>${index}</td>
+                <td>${index + 1}</td>
                 <td>${carImg.outerHTML}</td>
                 <td>${car.name}</td>
-                <td>${winner.time}</td>
-                <td>${winner.wins}</td>`;
+                <td>${winner.wins}</td>
+                <td>${winner.time}</td>`;
           const newRow = this.table.getHtmlElement().insertRow();
           newRow.innerHTML = tableRowTemplate;
         }

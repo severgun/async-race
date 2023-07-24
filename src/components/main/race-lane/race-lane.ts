@@ -4,6 +4,11 @@ import carIcon from "../../../assets/tractor-side-view-svgrepo-com.svg";
 import { Button, ButtonParams } from "../button/button";
 import { AsyncRaceApi, Car } from "../../../app/async-race-api";
 
+export interface FinishedCar {
+  id: number;
+  time: number;
+}
+
 enum CssClasses {
   RACE_LANE = "race-lane",
   RACE_LANE_TRACK = "race-lane__track",
@@ -18,7 +23,7 @@ enum CssClasses {
   STOP_ENGINE_BUTTON = "stop-eng-btn",
 }
 
-export default class RaceLane {
+export class RaceLane {
   private element;
 
   private track;
@@ -106,22 +111,41 @@ export default class RaceLane {
     return this.element;
   }
 
-  async race(): Promise<void> {
+  async race(): Promise<FinishedCar> {
     if (!this.engineRunning) {
       this.toggleDisableRunEngButton();
       this.toggleDisableStopEngButton();
+      //   AsyncRaceApi.engineStart(this.car.id).then((startResponse) => {
+      //     if (startResponse !== null) {
+      //       const time = startResponse.distance / startResponse.velocity;
+      //       this.engineRunning = true;
+      //       this.animateCar(time);
+      //       AsyncRaceApi.engineDrive(this.car.id).catch((error) => {
+      //         if (error.message.includes("500")) {
+      //           clearInterval(this.animationIntervalId);
+      //         }
+      //       });
+      //     }
+      //   });
+
       const startResponse = await AsyncRaceApi.engineStart(this.car.id);
       if (startResponse !== null) {
         const time = startResponse.distance / startResponse.velocity;
         this.engineRunning = true;
-        AsyncRaceApi.engineDrive(this.car.id).catch((error) => {
-          if (error.message.includes("500")) {
+        this.animateCar(time);
+        try {
+          const response = await AsyncRaceApi.engineDrive(this.car.id);
+          if (response.success) {
+            return { id: this.car.id, time };
+          }
+        } catch (error) {
+          if (error instanceof Error && error.message.includes("500")) {
             clearInterval(this.animationIntervalId);
           }
-        });
-        this.animateCar(time);
+        }
       }
     }
+    return Promise.reject();
   }
 
   reset(): void {
@@ -199,7 +223,6 @@ export default class RaceLane {
     const FRAME_TIME = 1000 / 60;
 
     const distance = this.finishFlag.offsetLeft + this.finishFlag.offsetWidth;
-
     const perFrameDistance = distance / (time / FRAME_TIME);
     let currentPos = 0;
     this.animationIntervalId = window.setInterval(() => {
