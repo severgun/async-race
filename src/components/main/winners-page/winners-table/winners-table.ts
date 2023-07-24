@@ -15,8 +15,13 @@ export default class WinnersTable {
     this.configureElement();
   }
 
-  getHtmlElement(): HTMLElement {
+  getHtmlElement(): HTMLTableElement {
     return this.element;
+  }
+
+  clearTable(): void {
+    this.element.replaceChildren();
+    this.addTableHeader();
   }
 
   private configureElement(): void {
