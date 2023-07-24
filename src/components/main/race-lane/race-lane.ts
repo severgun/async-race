@@ -58,6 +58,9 @@ export class RaceLane {
   private removeButtonClickHandlerBound =
     this.removeButtonClickHandler.bind(this);
 
+  private runEngineButtonClickHandlerBound =
+    this.runEngineButtonClickHandler.bind(this);
+
   constructor(car: Car) {
     const selectButtonParams: ButtonParams = {
       cssClasses: [CssClasses.SELECT_BUTTON],
@@ -77,7 +80,7 @@ export class RaceLane {
       cssClasses: [CssClasses.RUN_ENGINE_BUTTON],
       text: "R",
       tooltip: "Run engine",
-      callBack: this.race.bind(this),
+      callBack: this.runEngineButtonClickHandlerBound,
     };
 
     const stopEngineButtonParams: ButtonParams = {
@@ -204,6 +207,14 @@ export class RaceLane {
     }
 
     this.getHtmlElement().dispatchEvent(this.updateGarageEvent);
+  }
+
+  private async runEngineButtonClickHandler(): Promise<void> {
+    try {
+      await this.race();
+    } catch (error) {
+      // ignore
+    }
   }
 
   private animateCar(time: number): void {
