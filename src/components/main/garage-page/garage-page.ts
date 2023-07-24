@@ -1,4 +1,3 @@
-import "./garage-page.css";
 import CarEditControls from "./car-edit-controls/car-edit-controls";
 import GarageControls from "./garage-controls/garage-controls";
 import {

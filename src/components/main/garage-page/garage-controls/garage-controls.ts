@@ -1,5 +1,4 @@
 import { Button, ButtonParams } from "../../button/button";
-import "./garage-controls.css";
 import getRandomCarName from "../../../../utils/getRandomCarName";
 import { AsyncRaceApi } from "../../../../app/async-race-api";
 import getRandomColorHex from "../../../../utils/getRandomColor";
