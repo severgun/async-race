@@ -9,6 +9,7 @@ import {
 } from "../../../app/async-race-api";
 import { FinishedCar, RaceLane } from "../race-lane/race-lane";
 import PaginationControls from "../pagination-controls/pagination-controls";
+import WinnerPopup from "./winner-popup/winner-popup";
 
 enum CssClasses {
   GARAGE_PAGE = "garage-page",
@@ -31,6 +32,8 @@ export default class GaragePage {
   private paginationControls;
 
   private raceLanesContainer;
+
+  private winnerPopup;
 
   private currentPage;
 
@@ -60,6 +63,7 @@ export default class GaragePage {
       ITEMS_PER_PAGE,
     );
     this.raceLanesContainer = document.createElement("div");
+    this.winnerPopup = new WinnerPopup();
     this.currentPage = 1;
     this.raceLanesOnPage = [];
     this.totalCarsCount = "";
@@ -192,10 +196,13 @@ export default class GaragePage {
   }
 
   private async setWinner(winner: FinishedCar): Promise<void> {
+    const { car, time } = winner;
+    const { id, color, name } = car;
+
+    this.winnerPopup.showWinnerPopup(name, color);
     const winners = await AsyncRaceApi.getWinners();
-    const recordInDb = winners?.find((element) => element.id === winner.id);
+    const recordInDb = winners?.find((element) => element.id === id);
     let wins = 1;
-    const { id, time } = winner;
     const timeInSeconds = +(time / 1000).toFixed(2);
     if (recordInDb !== undefined) {
       wins = recordInDb.wins + 1;

@@ -5,7 +5,7 @@ import { Button, ButtonParams } from "../button/button";
 import { AsyncRaceApi, Car } from "../../../app/async-race-api";
 
 export interface FinishedCar {
-  id: number;
+  car: Car;
   time: number;
 }
 
@@ -136,7 +136,7 @@ export class RaceLane {
         try {
           const response = await AsyncRaceApi.engineDrive(this.car.id);
           if (response.success) {
-            return { id: this.car.id, time };
+            return { car: this.car, time };
           }
         } catch (error) {
           if (error instanceof Error && error.message.includes("500")) {
