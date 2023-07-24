@@ -18,6 +18,20 @@ enum CssClasses {
 const TITLE_TEXT = "Winners";
 const ITEMS_PER_PAGE = 10;
 
+enum SortFields {
+  WINS = "wins",
+  TIME = "time",
+}
+
+enum SortOrder {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+interface SortParams {
+  field: SortFields;
+  order: SortOrder;
+}
+
 export default class WinnersPage {
   private element;
 
@@ -31,8 +45,14 @@ export default class WinnersPage {
 
   private totalWinnersCount: string | null;
 
+  private currentSort: SortParams | null;
+
   private currentPageChangedEventHandlerBound =
     this.currentPageChangedEventHandler.bind(this);
+
+  private sortByWinsEventHandlerBound = this.sortByWinsEventHandler.bind(this);
+
+  private sortByTimeEventHandlerBound = this.sortByTimeEventHandler.bind(this);
 
   constructor() {
     this.element = document.createElement("div");
@@ -44,6 +64,7 @@ export default class WinnersPage {
     this.currentPage = 1;
     this.totalWinnersCount = "";
     this.table = new WinnersTable();
+    this.currentSort = null;
 
     this.configureElement();
   }
@@ -64,6 +85,16 @@ export default class WinnersPage {
     this.getHtmlElement().addEventListener(
       "currentPageChanged",
       this.currentPageChangedEventHandlerBound,
+    );
+
+    this.getHtmlElement().addEventListener(
+      "sortByWins",
+      this.sortByWinsEventHandlerBound,
+    );
+
+    this.getHtmlElement().addEventListener(
+      "sortByTime",
+      this.sortByTimeEventHandlerBound,
     );
 
     this.updateWinnersPageContent();
@@ -126,6 +157,58 @@ export default class WinnersPage {
       if (winners !== null) {
         this.updateWinnersTable(winners);
       }
+    }
+  }
+
+  private async sortByWinsEventHandler(): Promise<void> {
+    let order = SortOrder.ASC;
+    if (this.currentSort?.field === SortFields.WINS) {
+      order =
+        this.currentSort.order === SortOrder.ASC
+          ? SortOrder.DESC
+          : SortOrder.ASC;
+    }
+
+    this.currentSort = {
+      field: SortFields.WINS,
+      order,
+    };
+    const requestParams: WinnersRequestParams = {
+      limit: ITEMS_PER_PAGE,
+      page: this.currentPage,
+      sort: SortFields.WINS,
+      order,
+    };
+    const winners = await AsyncRaceApi.getWinners(requestParams);
+    AsyncRaceApi.getWinnersTotalCount();
+    if (winners !== null) {
+      this.updateWinnersTable(winners);
+    }
+  }
+
+  private async sortByTimeEventHandler(): Promise<void> {
+    let order = SortOrder.ASC;
+    if (this.currentSort?.field === SortFields.TIME) {
+      order =
+        this.currentSort.order === SortOrder.ASC
+          ? SortOrder.DESC
+          : SortOrder.ASC;
+    }
+    this.currentSort = {
+      field: SortFields.TIME,
+      order,
+    };
+
+    const requestParams: WinnersRequestParams = {
+      limit: ITEMS_PER_PAGE,
+      page: this.currentPage,
+      sort: SortFields.TIME,
+      order,
+    };
+    const winners = await AsyncRaceApi.getWinners(requestParams);
+    AsyncRaceApi.getWinnersTotalCount();
+    if (winners !== null) {
+      this.updateWinnersTable(winners);
     }
   }
 }
