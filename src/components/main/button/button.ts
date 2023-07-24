@@ -19,7 +19,7 @@ export class Button {
     this.configureElement(params);
   }
 
-  getHtmlElement(): HTMLElement {
+  getHtmlElement(): HTMLButtonElement {
     return this.element;
   }
 
