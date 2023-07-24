@@ -38,8 +38,6 @@ export default class GaragePage {
 
   private totalCarsCount: string | null;
 
-  private loadEventHandlerBound = this.loadEventHandler.bind(this);
-
   private updateGarageEventHandlerBound =
     this.updateGarageEventHandler.bind(this);
 
@@ -96,10 +94,7 @@ export default class GaragePage {
       this.raceLanesContainer,
     );
 
-    this.getHtmlElement().addEventListener(
-      "DOMNodeInserted",
-      this.loadEventHandlerBound,
-    );
+    this.loadPageContent();
 
     this.getHtmlElement().addEventListener(
       "updateGarage",
@@ -122,8 +117,7 @@ export default class GaragePage {
     );
   }
 
-  private async loadEventHandler(event: Event): Promise<void> {
-    if (event.target === this.getHtmlElement()) {
+  private async loadPageContent(): Promise<void> {
       this.totalCarsCount = await AsyncRaceApi.getCarsTotalCount();
       this.title.innerText = `${TITLE_TEXT}(${this.totalCarsCount})`;
       this.title.classList.add(CssClasses.GARAGE_PAGE_TITLE);
@@ -137,7 +131,6 @@ export default class GaragePage {
         this.updateRaceLanesContainer(cars);
       }
     }
-  }
 
   private async updateGarageEventHandler(event: Event): Promise<void> {
     this.totalCarsCount = await AsyncRaceApi.getCarsTotalCount();
