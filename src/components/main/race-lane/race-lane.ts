@@ -108,6 +108,8 @@ export default class RaceLane {
 
   async race(): Promise<void> {
     if (!this.engineRunning) {
+      this.toggleDisableRunEngButton();
+      this.toggleDisableStopEngButton();
       const startResponse = await AsyncRaceApi.engineStart(this.car.id);
       if (startResponse !== null) {
         const time = startResponse.distance / startResponse.velocity;
@@ -124,9 +126,21 @@ export default class RaceLane {
 
   async reset(): Promise<void> {
     clearInterval(this.animationIntervalId);
+    this.toggleDisableRunEngButton();
+    this.toggleDisableStopEngButton();
     this.carImg.style.left = "0px";
     this.engineRunning = false;
     AsyncRaceApi.engineStop(this.car.id);
+  }
+
+  toggleDisableRunEngButton(): void {
+    const button = this.runEngButton.getHtmlElement() as HTMLButtonElement;
+    button.disabled = !button.disabled;
+  }
+
+  toggleDisableStopEngButton(): void {
+    const button = this.stopEngButton.getHtmlElement() as HTMLButtonElement;
+    button.disabled = !button.disabled;
   }
 
   private configureElement(): void {
@@ -152,6 +166,7 @@ export default class RaceLane {
 
     const secondRow = document.createElement("div");
     secondRow.classList.add(CssClasses.RACE_LANE_SECOND_ROW);
+    this.toggleDisableStopEngButton();
     secondRow.append(
       this.runEngButton.getHtmlElement(),
       this.stopEngButton.getHtmlElement(),

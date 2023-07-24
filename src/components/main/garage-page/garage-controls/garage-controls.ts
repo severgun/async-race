@@ -71,6 +71,16 @@ export default class GarageControls {
     return this.element;
   }
 
+  toggleDisableRaceButton(): void {
+    const button = this.raceButton.getHtmlElement() as HTMLButtonElement;
+    button.disabled = !button.disabled;
+  }
+
+  toggleDisableResetButton(): void {
+    const button = this.resetButton.getHtmlElement() as HTMLButtonElement;
+    button.disabled = !button.disabled;
+  }
+
   private async generateCarsButtonHandler(): Promise<void> {
     const results = new Array(GENERATE_CARS_COUNT);
     for (let index = 0; index < GENERATE_CARS_COUNT; index += 1) {
@@ -87,6 +97,7 @@ export default class GarageControls {
 
   private configureElement(): void {
     this.element.classList.add(CssClasses.GARAGE_CONTROLS);
+    this.toggleDisableResetButton();
     this.element.append(
       this.raceButton.getHtmlElement(),
       this.resetButton.getHtmlElement(),

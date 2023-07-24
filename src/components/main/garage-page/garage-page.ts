@@ -118,19 +118,19 @@ export default class GaragePage {
   }
 
   private async loadPageContent(): Promise<void> {
-      this.totalCarsCount = await AsyncRaceApi.getCarsTotalCount();
-      this.title.innerText = `${TITLE_TEXT}(${this.totalCarsCount})`;
-      this.title.classList.add(CssClasses.GARAGE_PAGE_TITLE);
+    this.totalCarsCount = await AsyncRaceApi.getCarsTotalCount();
+    this.title.innerText = `${TITLE_TEXT}(${this.totalCarsCount})`;
+    this.title.classList.add(CssClasses.GARAGE_PAGE_TITLE);
 
-      const requestParams: CarsRequestParams = {
-        limit: ITEMS_PER_PAGE,
-        page: this.currentPage,
-      };
-      const cars = await AsyncRaceApi.getCars(requestParams);
-      if (cars !== null) {
-        this.updateRaceLanesContainer(cars);
-      }
+    const requestParams: CarsRequestParams = {
+      limit: ITEMS_PER_PAGE,
+      page: this.currentPage,
+    };
+    const cars = await AsyncRaceApi.getCars(requestParams);
+    if (cars !== null) {
+      this.updateRaceLanesContainer(cars);
     }
+  }
 
   private async updateGarageEventHandler(event: Event): Promise<void> {
     this.totalCarsCount = await AsyncRaceApi.getCarsTotalCount();
@@ -166,12 +166,16 @@ export default class GaragePage {
   }
 
   private async startRaceGarageEventHandler(): Promise<void> {
+    this.garageControls.toggleDisableRaceButton();
+    this.garageControls.toggleDisableResetButton();
     this.raceLanesOnPage.forEach((lane) => {
       lane.race();
     });
   }
 
   private async stopRaceGarageEventHandler(): Promise<void> {
+    this.garageControls.toggleDisableRaceButton();
+    this.garageControls.toggleDisableResetButton();
     this.raceLanesOnPage.forEach((lane) => {
       lane.reset();
     });
