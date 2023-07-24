@@ -1,5 +1,6 @@
 .pagination-controls {
   display: flex;
+  margin: 1rem 0;
 }
 
 .pagination-controls__prev, .pagination-controls__next {

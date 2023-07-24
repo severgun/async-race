@@ -1,3 +1,15 @@
+.winners-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.winners__title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
 .winners__car-icon, .winners__car-icon > svg {
   display: inline-block;
   width: 4rem;
