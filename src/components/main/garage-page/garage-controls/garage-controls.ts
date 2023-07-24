@@ -71,14 +71,14 @@ export default class GarageControls {
     return this.element;
   }
 
-  toggleDisableRaceButton(): void {
+  setDisableRaceButton(value: boolean): void {
     const button = this.raceButton.getHtmlElement() as HTMLButtonElement;
-    button.disabled = !button.disabled;
+    button.disabled = value;
   }
 
-  toggleDisableResetButton(): void {
+  setDisableResetButton(value: boolean): void {
     const button = this.resetButton.getHtmlElement() as HTMLButtonElement;
-    button.disabled = !button.disabled;
+    button.disabled = value;
   }
 
   private async generateCarsButtonHandler(): Promise<void> {
@@ -97,7 +97,7 @@ export default class GarageControls {
 
   private configureElement(): void {
     this.element.classList.add(CssClasses.GARAGE_CONTROLS);
-    this.toggleDisableResetButton();
+    this.setDisableResetButton(true);
     this.element.append(
       this.raceButton.getHtmlElement(),
       this.resetButton.getHtmlElement(),

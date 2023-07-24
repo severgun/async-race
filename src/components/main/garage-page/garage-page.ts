@@ -136,7 +136,7 @@ export default class GaragePage {
     }
   }
 
-  private async updateGarageEventHandler(event: Event): Promise<void> {
+  private async updateGarageEventHandler(): Promise<void> {
     this.totalCarsCount = await AsyncRaceApi.getCarsTotalCount();
     this.title.innerText = `${TITLE_TEXT}(${this.totalCarsCount})`;
     this.title.classList.add(CssClasses.GARAGE_PAGE_TITLE);
@@ -149,7 +149,6 @@ export default class GaragePage {
     if (cars !== null) {
       this.updateRaceLanesContainer(cars);
     }
-    console.log("garage updateGarageEventHandler", event, cars);
   }
 
   private async currentPageChangedEventHandler(event: Event): Promise<void> {
@@ -161,7 +160,6 @@ export default class GaragePage {
         page: this.currentPage,
       };
       const cars = await AsyncRaceApi.getCars(requestParams);
-      console.log("EVENT", event.detail, requestParams, cars);
       AsyncRaceApi.getCarsTotalCount();
       if (cars !== null) {
         this.updateRaceLanesContainer(cars);
@@ -170,26 +168,34 @@ export default class GaragePage {
   }
 
   private async startRaceGarageEventHandler(): Promise<void> {
-    this.garageControls.toggleDisableRaceButton();
-    this.garageControls.toggleDisableResetButton();
-    // this.raceLanesOnPage.forEach((lane) => {
-    //   lane.race();
-    // });
+    this.garageControls.setDisableRaceButton(true);
+    this.garageControls.setDisableResetButton(false);
+
+    this.paginationControls.disableControls(true);
+
     const promises: Promise<FinishedCar | undefined>[] = [];
     this.raceLanesOnPage.forEach((lane) => {
       promises.push(lane.race());
     });
 
-    Promise.any(promises).then((winner) => {
-      if (winner !== undefined) {
-        this.setWinner(winner);
-      }
-    });
+    Promise.any(promises)
+      .then((winner) => {
+        if (winner !== undefined) {
+          this.setWinner(winner);
+        }
+      })
+      .catch(() => {
+        // eslint-disable-next-line no-console
+        console.log("All cars did not finish.");
+      })
+      .finally(() => {
+        this.paginationControls.disableControls(false);
+      });
   }
 
   private async stopRaceGarageEventHandler(): Promise<void> {
-    this.garageControls.toggleDisableRaceButton();
-    this.garageControls.toggleDisableResetButton();
+    this.garageControls.setDisableRaceButton(false);
+    this.garageControls.setDisableResetButton(true);
     this.raceLanesOnPage.forEach((lane) => {
       lane.reset();
     });

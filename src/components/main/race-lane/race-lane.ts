@@ -113,20 +113,8 @@ export class RaceLane {
 
   async race(): Promise<FinishedCar> {
     if (!this.engineRunning) {
-      this.toggleDisableRunEngButton();
-      this.toggleDisableStopEngButton();
-      //   AsyncRaceApi.engineStart(this.car.id).then((startResponse) => {
-      //     if (startResponse !== null) {
-      //       const time = startResponse.distance / startResponse.velocity;
-      //       this.engineRunning = true;
-      //       this.animateCar(time);
-      //       AsyncRaceApi.engineDrive(this.car.id).catch((error) => {
-      //         if (error.message.includes("500")) {
-      //           clearInterval(this.animationIntervalId);
-      //         }
-      //       });
-      //     }
-      //   });
+      this.setDisableRunEngButton(true);
+      this.setDisableStopEngButton(false);
 
       const startResponse = await AsyncRaceApi.engineStart(this.car.id);
       if (startResponse !== null) {
@@ -151,21 +139,21 @@ export class RaceLane {
   reset(): void {
     AsyncRaceApi.engineStop(this.car.id).then(() => {
       clearInterval(this.animationIntervalId);
-      this.toggleDisableRunEngButton();
-      this.toggleDisableStopEngButton();
+      this.setDisableRunEngButton(false);
+      this.setDisableStopEngButton(true);
       this.carImg.style.left = "0px";
       this.engineRunning = false;
     });
   }
 
-  toggleDisableRunEngButton(): void {
+  setDisableRunEngButton(value: boolean): void {
     const button = this.runEngButton.getHtmlElement() as HTMLButtonElement;
-    button.disabled = !button.disabled;
+    button.disabled = value;
   }
 
-  toggleDisableStopEngButton(): void {
+  setDisableStopEngButton(value: boolean): void {
     const button = this.stopEngButton.getHtmlElement() as HTMLButtonElement;
-    button.disabled = !button.disabled;
+    button.disabled = value;
   }
 
   private configureElement(): void {
@@ -191,7 +179,7 @@ export class RaceLane {
 
     const secondRow = document.createElement("div");
     secondRow.classList.add(CssClasses.RACE_LANE_SECOND_ROW);
-    this.toggleDisableStopEngButton();
+    this.setDisableStopEngButton(true);
     secondRow.append(
       this.runEngButton.getHtmlElement(),
       this.stopEngButton.getHtmlElement(),
@@ -202,7 +190,6 @@ export class RaceLane {
   }
 
   private selectButtonClickHandler(): void {
-    console.log("CLICK SELECT", this.car);
     this.getHtmlElement().dispatchEvent(this.carSelectedEvent);
   }
 
