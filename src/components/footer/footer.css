@@ -1,0 +1,17 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.author-link {
+  display: flex;
+}
+.author-link-icon {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+.author-link-text {
+  margin-left: 1rem;
+  line-height: 2.2rem;
+  font-size: 1.2rem;
+}

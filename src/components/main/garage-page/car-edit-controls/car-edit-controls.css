@@ -1,0 +1,4 @@
+.car-edit-controls {
+  display: grid;
+  grid-template-columns: 20rem 7rem 7em;
+}
