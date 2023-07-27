@@ -142,14 +142,13 @@ export class RaceLane {
     return Promise.reject();
   }
 
-  reset(): void {
-    AsyncRaceApi.engineStop(this.car.id).then(() => {
-      clearInterval(this.animationIntervalId);
-      this.setDisableRunEngButton(false);
-      this.setDisableStopEngButton(true);
-      this.carImg.style.left = "0px";
-      this.engineRunning = false;
-    });
+  async reset(): Promise<void> {
+    await AsyncRaceApi.engineStop(this.car.id);
+    clearInterval(this.animationIntervalId);
+    this.setDisableRunEngButton(false);
+    this.setDisableStopEngButton(true);
+    this.carImg.style.left = "0px";
+    this.engineRunning = false;
   }
 
   setDisableRunEngButton(value: boolean): void {

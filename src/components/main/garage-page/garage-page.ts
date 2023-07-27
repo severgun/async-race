@@ -36,6 +36,8 @@ export default class GaragePage {
 
   private currentPage;
 
+  private raceInProgress;
+
   private raceLanesOnPage: RaceLane[];
 
   private totalCarsCount: string | null;
@@ -66,6 +68,7 @@ export default class GaragePage {
     this.currentPage = 1;
     this.raceLanesOnPage = [];
     this.totalCarsCount = "";
+    this.raceInProgress = false;
 
     this.configureElement();
   }
@@ -171,6 +174,7 @@ export default class GaragePage {
     this.garageControls.setDisableResetButton(false);
 
     this.paginationControls.disableControls(true);
+    this.raceInProgress = true;
 
     const promises: Promise<FinishedCar | undefined>[] = [];
     this.raceLanesOnPage.forEach((lane) => {
@@ -189,15 +193,22 @@ export default class GaragePage {
       })
       .finally(() => {
         this.paginationControls.disableControls(false);
+        this.raceInProgress = false;
       });
   }
 
   private async stopRaceGarageEventHandler(): Promise<void> {
-    this.garageControls.setDisableRaceButton(false);
-    this.garageControls.setDisableResetButton(true);
+    const promises: Promise<void>[] = [];
     this.raceLanesOnPage.forEach((lane) => {
-      lane.reset();
+      promises.push(lane.reset());
     });
+    Promise.all(promises)
+      .then(() => {
+        this.garageControls.setDisableRaceButton(false);
+        this.garageControls.setDisableResetButton(true);
+        this.raceInProgress = false;
+      })
+      .catch();
   }
 
   private async setWinner(winner: FinishedCar): Promise<void> {
