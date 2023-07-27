@@ -46,6 +46,8 @@ export class RaceLane {
 
   private engineRunning;
 
+  private carFinished;
+
   private animationIntervalId;
 
   private carSelectedEvent;
@@ -97,6 +99,7 @@ export class RaceLane {
     this.finishFlag = document.createElement("div");
     this.car = car;
     this.engineRunning = false;
+    this.carFinished = false;
     this.animationIntervalId = -1;
     this.selectButton = new Button(selectButtonParams);
     this.removeButton = new Button(removeButtonParams);
@@ -126,7 +129,7 @@ export class RaceLane {
         this.animateCar(time);
         try {
           const response = await AsyncRaceApi.engineDrive(this.car.id);
-          if (response.success) {
+          if (response.success && this.carFinished) {
             return { car: this.car, time };
           }
         } catch (error) {
@@ -139,14 +142,13 @@ export class RaceLane {
     return Promise.reject();
   }
 
-  reset(): void {
-    AsyncRaceApi.engineStop(this.car.id).then(() => {
-      clearInterval(this.animationIntervalId);
-      this.setDisableRunEngButton(false);
-      this.setDisableStopEngButton(true);
-      this.carImg.style.left = "0px";
-      this.engineRunning = false;
-    });
+  async reset(): Promise<void> {
+    await AsyncRaceApi.engineStop(this.car.id);
+    clearInterval(this.animationIntervalId);
+    this.setDisableRunEngButton(false);
+    this.setDisableStopEngButton(true);
+    this.carImg.style.left = "0px";
+    this.engineRunning = false;
   }
 
   setDisableRunEngButton(value: boolean): void {
@@ -224,7 +226,11 @@ export class RaceLane {
     const perFrameDistance = distance / (time / FRAME_TIME);
     let currentPos = 0;
     this.animationIntervalId = window.setInterval(() => {
-      if (currentPos >= distance || !this.engineRunning) {
+      if (currentPos >= distance) {
+        this.carFinished = true;
+        clearInterval(this.animationIntervalId);
+      }
+      if (!this.engineRunning) {
         clearInterval(this.animationIntervalId);
       }
       this.carImg.style.left = `${currentPos}px`;
